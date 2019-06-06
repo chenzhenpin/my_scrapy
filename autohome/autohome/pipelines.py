@@ -109,7 +109,7 @@ class AutohomePipeline(object):
                             color = a.find('div', class_="tip-content").get_text()
                             wcolor = wcolor + color + "(" + style + ")" + ","
                         except Exception as e:
-                            traceback.print_exc(e)
+                            print(e)
                     if len(wcolor) > 1:
                         wcolor = wcolor[0:-1]
             imgName, imgPath = self.download(imgUrl)
