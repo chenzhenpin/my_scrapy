@@ -7,6 +7,7 @@ from scrapy.http import Request
 from autohome.items import AutohomeItem
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import datetime
 import time
 import pymysql
 import requests
@@ -45,9 +46,10 @@ class MycrawlSpider(scrapy.Spider):
                 brandName= brandLi.find('a',class_='mainBrand').find('div',class_='brand-name').find('span').get_text()
                 self.brandCode=self.brandCode+1
                 path=self.download(logoUrl)
-                sql = "INSERT INTO sys_dictionary_data (fk_dictionary, dictdata_name, dictdata_value, remark, create_date, is_enable) VALUES (%s, %s, %s, %s, %s, %s, %s);"
+                now=datetime.datetime.now()
+                sql = "INSERT INTO sys_dictionary_data (fk_dictionary, dictdata_name, dictdata_value, remark, create_date, is_enable) VALUES ( %s, %s, %s, %s, %s, %s);"
                 cur = self.conn.cursor()
-                cur.execute(sql, "2a7c09c5-30d7-11e8-a6cd-1051721b40df",brandName,str(self.brandCode),path,time.time(),"T")
+                cur.execute(sql, ('2a7c09c5-30d7-11e8-a6cd-1051721b40df',brandName,str(self.brandCode),path,now,'T'))
                 self.conn.commit()
                 yield Request("http://car.bitauto.com/"+brandLink,
                         headers={
@@ -61,7 +63,7 @@ class MycrawlSpider(scrapy.Spider):
                         "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
 
                     }
-                ,callback=lambda response,initialsName=initialsName,logoUrl=logoUrl,brandName=brandName,brandCode=self.brandCode:self.parse(response,initialsName,logoUrl,brandName))
+                ,callback=lambda response,initialsName=initialsName,logoUrl=logoUrl,brandName=brandName,brandCode=self.brandCode:self.parse(response,initialsName,logoUrl,brandName,brandCode))
 
     def parse(self, response,initialsName,logoUrl,brandName,brandCode):
         print("parse----------------")
