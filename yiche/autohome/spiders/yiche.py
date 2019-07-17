@@ -24,7 +24,6 @@ class MycrawlSpider(scrapy.Spider):
             print(r'error connect--------------------------------------------------')
 
     def start_requests(self):
-        print('--------------')
         driver = webdriver.Firefox()
         driver.get("http://car.bitauto.com/")
         time.sleep(2)
