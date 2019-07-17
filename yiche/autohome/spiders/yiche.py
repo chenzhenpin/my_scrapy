@@ -14,7 +14,7 @@ import requests
 import os
 class MycrawlSpider(scrapy.Spider):
     name = 'yiche'
-    allowed_domains = ['http://car.bitauto.com/','http://car.bitauto.com/','http://car.bitauto.com/']
+    allowed_domains = ['http://car.bitauto.com/']
 
     def __init__(self):
         try:
@@ -32,8 +32,6 @@ class MycrawlSpider(scrapy.Spider):
         context=""
         for div in divs:
             context=div.get_attribute('innerHTML')
-
-
         soup = BeautifulSoup(context)
         initialsLis = soup.find('div', class_='tree-list').find('ul', class_="list-con").find_all('li',id=re.compile("letter*"))
         for initialsLi in initialsLis:
